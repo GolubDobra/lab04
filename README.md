@@ -1,144 +1,170 @@
-## Laboratory work IV
+Данная лабораторная работа посвещена изучению систем автоматизации сборки проекта на примере **CMake**
 
-Данная лабораторная работа посвещена изучению систем контроля версий на примере **Git**.
-
-```bash
-$ open https://git-scm.com  # Открыть полезный сайт
+```ShellSession
+$ open https://cmake.org/
 ```
 
 ## Tasks
 
-- [X] 1. Создать публичный репозиторий с названием **lab03** и с лиценцией **MIT**
-- [X] 2. Ознакомиться со ссылками учебного материала
-- [X] 3. Выполнить инструкцию учебного материала
-- [X] 4. Составить отчет и отправить ссылку личным сообщением в **Slack**
+- [x] 1. Создать публичный репозиторий с названием **lab04** на сервисе **GitHub**
+- [x] 2. Ознакомиться со ссылками учебного материала
+- [x] 3. Выполнить инструкцию учебного материала
+- [x] 4. Составить отчет и отправить ссылку личным сообщением в **Slack**
 
 ## Tutorial
 
+Установка значений для сервиса **GitHub**
+
 ```ShellSession
-$ export GITHUB_USERNAME=DespiteDeath # Устанавливаем значение переменной окружения GITHUB_USERNAME
-$ export GITHUB_EMAIL=12l12z12k@gmail.com # Устанавливаем значение переменной окружения
-$ alias edit=subl # Выбираем текстовый редактор, в котором будем работать
+$ export GITHUB_USERNAME=GolubDobra  # Устанавливаем значение переменной окружения GITHUB_USERNAME
+```
+
+Инициализация директории **lab04**
+
+```ShellSession
+$ git clone https://github.com/GolubDobra/lab03 lab04 # Клонируем репозиторий lab03 в директорию lab04
+$ cd lab04 # Переходим в директорию lab04
+$ git remote remove origin # Удалить старый репозиторий
+$ git remote add origin https://github.com/GolubDobra/lab04 # Добавляем новый удаленный репозиторий
 ```
 
 ```ShellSession
-$ mkdir lab03 && cd lab03 # Создаем директорию, меняем директорию
-$ git init # Инициализируем существующее хранилище
-$ git config --global user.name ${GITHUB_USERNAME} # Объявлем юзернейм
-$ git config --global user.email ${GITHUB_EMAIL} # Объявляем почту
-$ git config -e --global # Редактируем 
-$ git remote add origin https://github.com/${GITHUB_USERNAME}/lab03 #
-$ git pull origin master # Объединяем репозиторий
-$ touch README.md # Добавляем README
-$ git status # Показываем статус
-$ git add README.md # Добавляем файл
-$ git commit -m"added README.md" # Коммитим
-$ git push origin master # Пушим
-```
-
-Добавить на сервисе **GitHub** в репозитории **lab03** файл **.gitignore**
-со следующем содержимом:
-
-```ShellSession
-*build*/ 
-*install*/
-*.swp
+$ g++ -I./include -std=c++11 -c sources/print.cpp # Подключаем библиотеки 11-го стандарта
+$ ls print.o 
+print.o
+$ ar rvs print.a print.o # Создание библиотеки, используя утилиту Archiver
+$ file print.a # Показать тип файла 
+$ g++ -I./include -std=c++11 -c examples/example1.cpp # Сборка проекта
+$ ls example1.o
+example1.o
+$ g++ example1.o print.a -o example1 # Сборка проекта
+$ ./example1 && echo
+hello
 ```
 
 ```ShellSession
-$ git pull origin master # Объединяем репозиторий
-$ git log # Смотрим логи
+$ g++ -I./include -std=c++11 -c examples/example2.cpp # Флаг I./ метка для заголовочных файлов
+$ ls example2.o
+example2.o
+$ g++ example2.o print.a -o example2 # Сборка проекта
+$ ./example2
+$ cat log.txt && echo # Вывод на экран содержимое файла 
+hello
 ```
 
+Удаление файлов
+
 ```ShellSession
-$ mkdir sources # Создаем папку sources
-$ mkdir include # Создаем папку include
-$ mkdir examples # Создаем папку examples 
+$ rm -rf example1.o example2.o print.o # Объектные файлы
+$ rm -rf print.a # Архивные файлы
+$ rm -rf example1 example2 # .exe файлы
+$ rm -rf log.txt # .txt файл
 ```
-
-Cоздаем и записываем новый файл (print.cpp) в папке sources
+Работа с файлом *CMakeLists.txt*
 
 ```ShellSession
-$ cat > sources/print.cpp <<EOF
-#include <print.hpp>
-
-void print(const std::string& text, std::ostream& out) {
-  out << text;
-}
-
-void print(const std::string& text, std::ofstream& out) {
-  out << text;
-}
+$ cat > CMakeLists.txt <<EOF
+cmake_minimum_required(VERSION 3.0) # Проверка версии CMake
+project(print) #название проекта
 EOF
 ```
-Cоздаем и записываем новый файл (print.hpp) в папке include
-
 ```ShellSession
-$ cat > include/print.hpp <<EOF 
-#include <string>
-#include <fstream>
-#include <iostream>
-
-void print(const std::string& text, std::ostream& out = std::cout);
-void print(const std::string& text, std::ofstream& out);
-EOF
-```
-Cоздаем и записываем новый файл (example1.сpp) в папке examples
-
-```ShellSession
-$ cat > examples/example1.cpp <<EOF
-#include <print.hpp>
-
-int main(int argc, char** argv) {
-  print("hello");
-}
-EOF
-```
-Cоздаем и записываем новый файл (example2.сpp) в папке examples
-
-```ShellSession
-$ cat > examples/example2.cpp <<EOF
-#include <fstream>
-#include <print.hpp>
-
-int main(int argc, char** argv) {
-  std::ofstream file("log.txt");
-  print(std::string("hello"), file);
-}
+$ cat >> CMakeLists.txt <<EOF
+set(CMAKE_CXX_STANDARD 11) # Подключение 11-го стандарта
+set(CMAKE_CXX_STANDARD_REQUIRED ON) # Активация 11-го стандарта
 EOF
 ```
 
 ```ShellSession
-$ edit README.md # Редактируем файл
+$ cat >> CMakeLists.txt <<EOF
+add_library(print STATIC ${CMAKE_CURRENT_SOURCE_DIR}/sources/print.cpp) # Добавление статической библиотеки,используя указанные исходные файлы
+EOF
 ```
 
-Отправляем последние  изменения на GitHub сервер
 ```ShellSession
-$ git status # Показывает рабочий статус дерева
-$ git add . # Добавить содержимое
-$ git commit -m"added sources" # Коммитим
-$ git push origin master # Пушим 
+$ cat >> CMakeLists.txt <<EOF
+include_directories(\${CMAKE_CURRENT_SOURCE_DIR}/include) # Список директорий,относительно которых следует искать заголовочные файлы
+EOF
+```
+
+```ShellSession
+$ cmake -H. -B_build # Сборка проекта в каталог _build где генерируются файлы проекта
+$ cmake --build _build #Сборка и линковка проекта
+```
+Создаем исполняемые файл с именем example1 из исходника example1.cpp и example2 из исходника example2.cpp
+
+```ShellSession
+$ cat >> CMakeLists.txt <<EOF 
+
+add_executable(example1 \${CMAKE_CURRENT_SOURCE_DIR}/examples/example1.cpp) 
+add_executable(example2 \${CMAKE_CURRENT_SOURCE_DIR}/examples/example2.cpp) 
+EOF
+```
+Линковка программ example1 и example2 с библиотекой print
+
+```ShellSession
+$ cat >> CMakeLists.txt <<EOF
+
+target_link_libraries(example1 print) 
+target_link_libraries(example2 print)
+EOF
+```
+Собираем проект 
+
+```ShellSession
+$ cmake --build _build  #Запускаем сборку в каталоге _build
+$ cmake --build _build --target print #Сборка цели print
+$ cmake --build _build --target example1 #Сборка example1
+$ cmake --build _build --target example2 #Сборка example2
+```
+
+```ShellSession
+$ ls -la _build/libprint.a
+$ _build/example1 && echo # Сборка и вывод на экран содержимое файла
+hello
+$ _build/example2 # Сборка example2
+$ cat log.txt && echo
+hello
+```
+
+```ShellSession
+$ git clone https://github.com/tp-labs/lab04 tmp # Копирование 
+$ mv -f tmp/CMakeLists.txt . # Перемещение в tmp/CMakeLists.txt .
+$ rm -rf tmp # Удаление директории tmp
+```
+Настройки **CMake**
+
+```ShellSession
+$ cat CMakeLists.txt # Вывод содержимое файла
+$ cmake -H. -B_build -DCMAKE_INSTALL_PREFIX=_install # Сборка проекта с флагом -DCMAKE_INSTALL_PREFIX
+$ cmake --build _build --target install # Полная сборка проекта print 
+$ tree _install # Просмотр дерева вложенности файлов(расширенная версия ls *), аналогичная команда ls *
+
+Отправляем последние изменения на **GitHub** сервер
+
+```ShellSession
+$ git add CMakeLists.txt # Отследить изменения CMakeLists.txt 
+$ git commit -m"added CMakeLists.txt" # Сохранить изменения CMakeLists.txt 
+$ git push origin master # Выгрузка файлов на сервер
 ```
 
 ## Report
 
 ```ShellSession
-$ cd ~/workspace/labs/ 
-$ export LAB_NUMBER=03 
-$ git clone https://github.com/tp-labs/lab${LAB_NUMBER} tasks/lab${LAB_NUMBER} 
-$ mkdir reports/lab${LAB_NUMBER} 
-$ cp tasks/lab${LAB_NUMBER}/README.md reports/lab${LAB_NUMBER}/REPORT.md 
-$ cd reports/lab${LAB_NUMBER} 
-$ edit REPORT.md 
+$ cd ~/workspace/labs/
+$ export LAB_NUMBER=04
+$ git clone https://github.com/tp-labs/lab${LAB_NUMBER} tasks/lab${LAB_NUMBER}
+$ mkdir reports/lab${LAB_NUMBER}
+$ cp tasks/lab${LAB_NUMBER}/README.md reports/lab${LAB_NUMBER}/REPORT.md
+$ cd reports/lab${LAB_NUMBER}
+$ edit REPORT.md
 $ gistup -m "lab${LAB_NUMBER}"
 ```
 
 ## Links
 
-- [GitHub](https://github.com)
-- [Bitbucket](https://bitbucket.org)
-- [Gitlab](https://about.gitlab.com)
-- [LearnGitBranching](http://learngitbranching.js.org/)
+- [Autotools](http://www.gnu.org/software/automake/manual/html_node/Autotools-Introduction.html)
+- [CMake](https://cgold.readthedocs.io/en/latest/index.html)
 
 ```
 Copyright (c) 2017 Братья Вершинины
