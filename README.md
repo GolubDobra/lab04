@@ -13,13 +13,13 @@ $ open https://cmake.org/
 
 ## Tutorial
 
-Установка значений для сервиса **GitHub**
+#### Установка значений для сервиса **GitHub**
 
 ```ShellSession
 $ export GITHUB_USERNAME=GolubDobra  # Устанавливаем значение переменной окружения GITHUB_USERNAME
 ```
 
-Инициализация директории **lab04**
+#### Инициализация директории **lab04**
 
 ```ShellSession
 $ git clone https://github.com/GolubDobra/lab03 lab04 # Клонируем репозиторий lab03 в директорию lab04
@@ -60,7 +60,7 @@ $ cat log.txt && echo # Вывод на экран содержимое файл
 hello
 ```
 
-Удаление файлов
+#### Удаление файлов
 
 ```ShellSession
 $ rm -rf example1.o example2.o print.o # Объектные файлы
@@ -68,7 +68,7 @@ $ rm -rf print.a # Архивные файлы
 $ rm -rf example1 example2 # .exe файлы
 $ rm -rf log.txt # .txt файл
 ```
-Работа с файлом *CMakeLists.txt*
+#### Работа с файлом *CMakeLists.txt*
 
 ```ShellSession
 $ cat > CMakeLists.txt <<EOF
@@ -120,7 +120,7 @@ Scanning dependencies of target print
 [100%] Linking CXX static library libprint.a
 [100%] Built target print
 ```
-Создаем исполняемые файл с именем example1 из исходника example1.cpp и example2 из исходника example2.cpp
+#### Создаем исполняемые файл с именем example1 из исходника example1.cpp и example2 из исходника example2.cpp
 
 ```ShellSession
 $ cat >> CMakeLists.txt <<EOF 
@@ -129,7 +129,7 @@ add_executable(example1 \${CMAKE_CURRENT_SOURCE_DIR}/examples/example1.cpp)
 add_executable(example2 \${CMAKE_CURRENT_SOURCE_DIR}/examples/example2.cpp) 
 EOF
 ```
-Линковка программ example1 и example2 с библиотекой print
+#### Линковка программ example1 и example2 с библиотекой print
 
 ```ShellSession
 $ cat >> CMakeLists.txt <<EOF
@@ -138,7 +138,7 @@ target_link_libraries(example1 print)
 target_link_libraries(example2 print)
 EOF
 ```
-Собираем проект 
+#### Собираем проект 
 
 ```ShellSession
 $ cmake --build _build  #Запускаем сборку в каталоге _build
@@ -184,7 +184,7 @@ remote: Total 31 (delta 0), reused 0 (delta 0), pack-reused 31
 $ mv -f tmp/CMakeLists.txt . # Перемещение в tmp/CMakeLists.txt .
 $ rm -rf tmp # Удаление директории tmp
 ```
-Настройки **CMake**
+#### Настройки **CMake**
 
 ```ShellSession
 $ cat CMakeLists.txt # Вывод содержимое файла
@@ -224,8 +224,9 @@ _install
 └── lib
   └── libprint.a
   3 directories, 4 files
+```
 
-Отправляем последние изменения на **GitHub** сервер
+#### Отправляем последние изменения на **GitHub** сервер
 
 ```ShellSession
 $ git add CMakeLists.txt # Отследить изменения CMakeLists.txt 
