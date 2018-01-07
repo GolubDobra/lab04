@@ -23,6 +23,12 @@ $ export GITHUB_USERNAME=GolubDobra  # Устанавливаем значени
 
 ```ShellSession
 $ git clone https://github.com/GolubDobra/lab03 lab04 # Клонируем репозиторий lab03 в директорию lab04
+Клонирование в «lab04»…
+remote: Counting objects: 20, done.
+remote: Compressing objects: 100% (15/15), done.
+remote: Total 20 (delta 2), reused 11 (delta 0), pack-reused 0
+Распаковка объектов: 100% (20/20), готово.
+Проверка соединения… готово.
 $ cd lab04 # Переходим в директорию lab04
 $ git remote remove origin # Удалить старый репозиторий
 $ git remote add origin https://github.com/GolubDobra/lab04 # Добавляем новый удаленный репозиторий
@@ -91,7 +97,28 @@ EOF
 
 ```ShellSession
 $ cmake -H. -B_build # Сборка проекта в каталог _build где генерируются файлы проекта
+-- The C compiler identification is GNU 5.4.0
+-- The CXX compiler identification is GNU 5.4.0
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/GolubDobra/lab04/_build
 $ cmake --build _build #Сборка и линковка проекта
+Scanning dependencies of target print
+[ 50%] Building CXX object CMakeFiles/print.dir/sources/print.cpp.o
+[100%] Linking CXX static library libprint.a
+[100%] Built target print
 ```
 Создаем исполняемые файл с именем example1 из исходника example1.cpp и example2 из исходника example2.cpp
 
@@ -115,13 +142,31 @@ EOF
 
 ```ShellSession
 $ cmake --build _build  #Запускаем сборку в каталоге _build
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/GolubDobra/lab04/_build
+[ 33%] Built target print
+Scanning dependencies of target example1
+[ 50%] Building CXX object CMakeFiles/example1.dir/examples/example1.cpp.o
+[ 66%] Linking CXX executable example1
+[ 66%] Built target example1
+Scanning dependencies of target example2
+[ 83%] Building CXX object CMakeFiles/example2.dir/examples/example2.cpp.o
+[100%] Linking CXX executable example2
+[100%] Built target example2
 $ cmake --build _build --target print #Сборка цели print
+[100%] Built target print
 $ cmake --build _build --target example1 #Сборка example1
+[ 50%] Built target print
+[100%] Built target example1
 $ cmake --build _build --target example2 #Сборка example2
+[ 50%] Built target print
+[100%] Built target example2
 ```
 
 ```ShellSession
 $ ls -la _build/libprint.a
+-rw-rw-r-- 1 lightman1998 lightman1998 2302 сен 24 23:06 _build/libprint.a
 $ _build/example1 && echo # Сборка и вывод на экран содержимое файла
 hello
 $ _build/example2 # Сборка example2
@@ -131,6 +176,11 @@ hello
 
 ```ShellSession
 $ git clone https://github.com/tp-labs/lab04 tmp # Копирование 
+Клонирование в «tmp»…
+remote: Counting objects: 31, done.
+remote: Total 31 (delta 0), reused 0 (delta 0), pack-reused 31
+Распаковка объектов: 100% (31/31), готово.
+Проверка соединения… готово.
 $ mv -f tmp/CMakeLists.txt . # Перемещение в tmp/CMakeLists.txt .
 $ rm -rf tmp # Удаление директории tmp
 ```
@@ -151,8 +201,29 @@ add_executable(example2 ${CMAKE_CURRENT_SOURCE_DIR}/examples/example2.cpp)
 target_link_libraries(example1 print) 
 target_link_libraries(example2 print)
 $ cmake -H. -B_build -DCMAKE_INSTALL_PREFIX=_install # Сборка проекта с флагом -DCMAKE_INSTALL_PREFIX
+DCMAKE_INSTALL_PREFIX=_install
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/GolubDobra/lab04/_build
 $ cmake --build _build --target install # Полная сборка проекта print 
+[100%] Built target print
+Install the project...
+-- Install configuration: ""
+-- Installing: /home/GolubDobra/lab04/_install/lib/libprint.a
+-- Installing: /home/GolubDobra/lab04/_install/include
+-- Installing: /home/GolubDobra/lab04/_install/include/print.hpp
+-- Installing: /home/GolubDobra/lab04/_install/cmake/print-config.cmake
+-- Installing: /home/GolubDobra/lab04/_install/cmake/print-config-noconfig.cmake
 $ tree _install # Просмотр дерева вложенности файлов(расширенная версия ls *), аналогичная команда ls *
+_install
+├── cmake
+│ ├── print-config.cmake
+│ └── print-config-noconfig.cmake
+├── include
+│ └── print.hpp
+└── lib
+  └── libprint.a
+  3 directories, 4 files
 
 Отправляем последние изменения на **GitHub** сервер
 
